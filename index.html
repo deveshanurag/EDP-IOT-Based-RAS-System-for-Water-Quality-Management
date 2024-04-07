@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ThingSpeak Data Display</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>ThingSpeak Data Display</h1>
+    <div id="data-container"></div>
+
+    <script>
+        // Replace YOUR_CHANNEL_ID and YOUR_READ_API_KEY with your ThingSpeak channel ID and read API key
+        var channelId = '2499288';
+        var apiKey = 'MYHA3IPBTBPD2IT8';
+
+        // URL for fetching data from ThingSpeak
+        var url = 'https://api.thingspeak.com/channels/' + channelId + '/feeds.json?api_key=' + apiKey;
+
+        // Function to fetch data from ThingSpeak
+        function fetchData() {
+            $.getJSON(url, function(data) {
+                var feeds = data.feeds;
+
+                // Clear previous data
+                $('#data-container').empty();
+
+                // Display each data point
+                feeds.forEach(function(feed) {
+                    var timestamp = new Date(feed.created_at);
+                    var value1 = feed.field1; // Replace field1 with the field number containing your data
+                    var value2 = feed.field2; // Replace field2 with the field number containing your data
+                    var value3 = feed.field3;
+                    var value4 = feed.field4;
+                    var html = '<p><strong>Timestamp:</strong> ' + timestamp.toLocaleString() + '</p>';
+                    html += '<p><strong>Value 1:</strong> ' + value1 + '</p>';
+                    html += '<p><strong>Value 2:</strong> ' + value2 + '</p>';
+                    html += '<p><strong>Value 3:</strong> ' + value3 + '</p>';
+                    html += '<p><strong>Value 4:</strong> ' + value4 + '</p>';
+                    html += '<hr>';
+
+                    $('#data-container').append(html);
+                });
+            });
+        }
+
+        // Call fetchData function initially and every 10 seconds
+        fetchData();
+        setInterval(fetchData, 10000); // Update data every 10 seconds
+    </script>
+</body>
+</html>
